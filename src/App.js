@@ -1,59 +1,45 @@
 import './App.css';
-import {useEffect, useState} from "react";
-import {Octokit} from "octokit";
-import useDebounce from "./useDebounce";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Home from "./components/Home/Home";
+import UserPage from "./components/UserPage/UserPage";
+import {useDispatch, useSelector} from "react-redux";
+import useDebounce from "./hooks/useDebounce";
+import {useEffect} from "react";
+import {clearUsers, getUsers} from "./features/user/userSlice";
 
 function App() {
 
-    const [nameForFind, setNameForFind] = useState('');
+    const searchTerm = useSelector((state) => state.user.searchTerm)
 
-    const [foundUsers, setFoundUsers] = useState([]);
+    const debouncedSearchTerm = useDebounce(searchTerm, 1000)
 
-    const [isSearching, setIsSearching] = useState(false);
+    const dispatch = useDispatch();
 
-    const debouncedNameForFind = useDebounce(nameForFind, 2000);
-
-    const octokit = new Octokit({
-        auth: "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"
-    })
-
-    const findUsers = async (name) => {
-        await octokit.request(`GET /search/users`, {
-            q: `${name} in:login`,
-            per_page: 50,
-            page: 1,
-            order: "desk"
-        }).then((resp) => {
-            setFoundUsers(resp.data.items)
-            console.log(resp.data.items)
-        })
-    }
+    const loadingUsers = useSelector((state) => state.user.loadingUsers)
 
     useEffect(() => {
-        if (debouncedNameForFind) {
-
-            setIsSearching(true);
-            findUsers(debouncedNameForFind).then(() => {
-                setIsSearching(false);
-            })
-
-        } else {
-            setFoundUsers([]);
+        if (debouncedSearchTerm) {
+            dispatch(getUsers(debouncedSearchTerm))
         }
-    }, [debouncedNameForFind])
+    }, [debouncedSearchTerm])
 
-  return (
-    <div className="App">
-        <h1>GitHub Searcher</h1>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Home nameForFind={nameForFind} setNameForFind={setNameForFind} isSearching={isSearching} foundUsers={foundUsers}/>}/>
-            </Routes>
-        </BrowserRouter>
-    </div>
-  );
+    useEffect(() => {
+        if (!searchTerm) {
+            dispatch(clearUsers())
+        }
+    }, [searchTerm])
+
+    return (
+        <div className="App">
+            <h1>GitHub Searcher</h1>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Home searchTerm={searchTerm} loadingUsers={loadingUsers} />}/>
+                    <Route path="/user/:login" element={<UserPage/>}/>
+                </Routes>
+            </BrowserRouter>
+        </div>
+    );
 }
 
 export default App;
