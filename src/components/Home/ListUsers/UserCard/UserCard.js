@@ -1,23 +1,25 @@
-import {Card} from "react-bootstrap";
-import "./UserCard.css";
+import styles from './UserCard.module.scss';
 import {Link} from "react-router-dom";
+import Card from '../../../Card/Card';
 
 const UserCard = ({user}) => {
 
     return (
-        <Card>
-            <Card.Body>
-                <div className="card_container">
-                    <div className="card_container_image_name">
-                        <img src={user.avatar_url} width="100px"/>
-                        <Link to={`/user/${user.login}`}>
-                            <Card.Title>{user.login}</Card.Title>
-                        </Link>
+        <Link to={`/user/${user.login}`}>
+            <Card>
+                <div className={styles.imageLogin}>
+                    <img className={styles.image} src={user.avatar_url} alt="user avatar" width="60px" height="60px"/>
+                    <div className={styles.login}>
+                        {user.login}
                     </div>
-                    <Card.Title>Repo: {user.public_repos}</Card.Title>
                 </div>
-            </Card.Body>
-        </Card>
+                <div className={styles.repos}>
+                    <span className={styles.label}>Repo: </span>
+                    <span>{user.public_repos}</span>
+                </div>
+            </Card>
+
+        </Link>
     )
 }
 
