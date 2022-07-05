@@ -1,5 +1,6 @@
 import styles from './Input.module.scss';
-import {Spinner} from "react-bootstrap";
+// import {Spinner} from "react-bootstrap";
+import Spinner from "./Spinner/Spinner";
 
 const Input = (props) => {
 
@@ -12,7 +13,11 @@ const Input = (props) => {
                 placeholder={props.placeholder}
                 spellCheck="false"
             />
-            {props.loading && <Spinner className={styles.spinner} animation="border" variant="primary"/>}
+            {props.loading &&
+                <span className={styles.spinner}>
+                    <Spinner/>
+                </span>
+            }
         </div>
     )
 }
