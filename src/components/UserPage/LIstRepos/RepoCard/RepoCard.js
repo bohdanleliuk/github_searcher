@@ -5,7 +5,7 @@ import Card from "../../../Card/Card";
 const RepoCard = ({repo}) => {
 
     return (
-        <Link to={`/user/${repo.url}`}>
+        <a href={repo.clone_url} target="-blank">
             <Card>
                 <div className={styles.name}>
                     {repo.name}
@@ -21,7 +21,7 @@ const RepoCard = ({repo}) => {
                     </div>
                 </div>
             </Card>
-        </Link>
+        </a>
     )
 }
 
