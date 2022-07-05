@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const token = ""
+const token = "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"
 
 export const findUsers = async (searchLogin) => {
     let result = []
@@ -16,9 +16,9 @@ export const findUsers = async (searchLogin) => {
                 page: 1,
                 order: "desk",
             }
-    }).then((resp) => {
+        }).then((resp) => {
         result = resp.data.items
-    })
+    }).catch((err) => console.log('findUsers error: ' + err))
     return result
 }
 
@@ -32,7 +32,7 @@ export const findUser = async (login) => {
             }
         }).then((resp) => {
         result = resp.data
-    })
+    }).catch((err) => console.log('findUser error: ' + err))
     return result
 }
 
@@ -46,7 +46,7 @@ export const findUserRepos = async (login) => {
             }
         }).then((resp) => {
         result = resp.data
-    })
+    }).catch((err) => console.log('findUserRepos error: ' + err))
     return result
 }
 
@@ -66,6 +66,6 @@ export const findUserReposWithTerm = async (login, term) => {
             },
         }).then((resp) => {
         result = resp.data.items
-    })
+    }).catch((err) => console.log('findUserReposWithTerm error: ' + err))
     return result
 }
