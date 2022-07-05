@@ -1,6 +1,10 @@
 import axios from "axios";
 
+<<<<<<< HEAD
 const token = "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"
+=======
+const token = ""
+>>>>>>> 3a5874a559a47598a691625ccd18ba28b3369fd6
 
 export const findUsers = async (searchLogin) => {
     let result = []
